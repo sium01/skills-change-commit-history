@@ -16,48 +16,45 @@ Accidental commits can be tricky to remove with Git. In this GitHub Skills cours
 </header>
 
 <!--
-  <<< Author notes: Course start >>>
-  Include start button, a note about Actions minutes,
-  and tell the learner why they should take the course.
+  <<< Author notes: Step 1 >>>
+  Choose 3-5 steps for your course.
+  The first step is always the hardest, so pick something easy!
+  Link to docs.github.com for further explanations.
+  Encourage users to open new tabs for steps!
 -->
 
-## Welcome
+## Step 1: Removing sensitive data
 
-A trustworthy commit history is the backbone of version control with Git. As a result, altering commit history is difficult by design. Sometimes, the history needs to be altered to remove credentials or other sensitive data that is mistakenly checked in. In this course, we'll learn how to remove content from repository's complete history and apply best practices for preventing accidental commits in the future.
+_Welcome to "Change commit history"! :wave:_
 
-- **Who is this for**: Intermediate users of Git, organizations
-- **What you'll learn**: How to remove a file from Git's entire history
-- **What you'll build**: You'll manipulate the history of a Git repository
-- **Prerequisites**: We recommend you clone this repository to your machine and use the command line to follow along. You'll also need to install BFG Repo-Cleaner, but the steps will be covered in the course.
-- **How long**: This course takes less than 1 hour to complete.
+We'll start by working with `.env` files. These files usually contain sensitive content. For this course, we'll work on removing that file and all traces in the Git history. The first step is to remove the file from repository. We'll alter the history later.
 
-In this course, you will:
+We'll assume you're using the command line, but you can complete the course using your preferred tooling.
 
-1. Remove content from the root directory of a repository
-2. Use BFG Repo-Cleaner to remove content from repository history
-3. Avoid future accidental commits by adding a pattern to `.gitignore`
+**What is _sensitive content_?** Sensitive content is anything that is checked into your repository history that may put you or your organization at risk. This content usually comes in the form of credentials (i.e., passwords, access keys). The best practice for accidentally exposed sensitive content is to invalidate it (i.e., revoke a personal access token), completely remove it from all repository copies, and take measures to prevent future exposure.
 
-### How to start this course
+See [Deleting a file on GitHub Docs](https://docs.github.com/en/repositories/working-with-files/managing-files/deleting-files-in-a-repository#deleting-a-file) if you need additional help removing a file.
 
-<!-- For start course, run in JavaScript:
-'https://github.com/new?' + new URLSearchParams({
-  template_owner: 'skills',
-  template_name: 'change-commit-history',
-  owner: '@me',
-  name: 'skills-change-commit-history',
-  description: 'My copy of the skills course on changing commit history',
-  visibility: 'public',
-}).toString()
--->
+### :keyboard: Activity: Remove `.env` in the project root directory
 
-[![start-course](https://user-images.githubusercontent.com/1221423/235727646-4a590299-ffe5-480d-8cd5-8194ea184546.svg)](https://github.com/new?template_owner=skills&template_name=change-commit-history&owner=%40me&name=skills-change-commit-history&description=My+copy+of+the+skills+course+on+changing+commit+history&visibility=public)
-
-1. Right-click **Start course** and open the link in a new tab.
-2. In the new tab, most of the prompts will automatically fill in for you.
-   - For owner, choose your personal account or an organization to host the repository.
-   - We recommend creating a public repository, as private repositories will [use Actions minutes](https://docs.github.com/en/billing/managing-billing-for-github-actions/about-billing-for-github-actions).
-   - Scroll down and click the **Create repository** button at the bottom of the form.
-3. After your new repository is created, wait about 20 seconds, then refresh the page. Follow the step-by-step instructions in the new repository's README.
+1. Open your terminal of choice, clone this repository, and switch to your repository directory.
+   ```shell
+   git clone <your-repository-url>
+   cd <your-repository-name>
+   ```
+2. Delete `.env` from the root directory.
+   ```shell
+   git rm .env
+   ```
+3. Commit the removal of `.env`.
+   ```shell
+   git commit -m "remove .env file"
+   ```
+4. Push the removal to GitHub:
+   ```shell
+   git push
+   ```
+5. Wait about 20 seconds then refresh this page (the one you're following instructions from). [GitHub Actions](https://docs.github.com/en/actions) will automatically update to the next step.
 
 <footer>
 
