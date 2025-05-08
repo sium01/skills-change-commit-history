@@ -1,74 +1,60 @@
-name: Step 3, Avoiding future commits with .env
+name: Step 3 → Step 4 | Handle .gitignore and .env Commit Prevention
 
-# This workflow updates from step 3 to step 4.
+# ✅ This workflow upgrades the course step from 3 to 4 when `.gitignore` is updated correctly.
+# Trigger: Push to `.gitignore` file or manual dispatch
 
-# This will run every time we push `.gitignore`.
-# Reference: https://docs.github.com/en/actions/learn-github-actions/events-that-trigger-workflows
 on:
   workflow_dispatch:
-  # Add events that trigger this workflow.
   push:
     paths:
       - .gitignore
 
-# Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 permissions:
-  # Need `contents: read` to checkout the repository.
-  # Need `contents: write` to update the step metadata.
-  contents: write
+  contents: write  # Required for both checking out and writing back to the repository
 
 jobs:
-  # Get the current step to only run the main job when the learner is on the same step.
   get_current_step:
-    name: Check current step number
+    name: 🔍 Check Current Step Number
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v4
+
       - id: get_step
-        run: |
-          echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
+        name: 🔎 Read .step File
+        run: echo "current_step=$(cat ./.github/steps/-step.txt)" >> $GITHUB_OUTPUT
+
     outputs:
       current_step: ${{ steps.get_step.outputs.current_step }}
 
-  on_push-gitignore:
-    name: On push of .gitignore
+  on_push_gitignore:
+    name: 🛡️ Validate .gitignore & Promote Step
     needs: get_current_step
 
-    # We will only run this action when:
-    # 1. This repository isn't the template repository.
-    # 2. The step is currently 3.
-    # Reference: https://docs.github.com/en/actions/learn-github-actions/contexts
-    # Reference: https://docs.github.com/en/actions/learn-github-actions/expressions
     if: >-
-      ${{ !github.event.repository.is_template
-          && needs.get_current_step.outputs.current_step == 3 }}
+      ${{ !github.event.repository.is_template &&
+          needs.get_current_step.outputs.current_step == '3' }}
 
-    # We'll run Ubuntu for performance instead of Mac or Windows.
     runs-on: ubuntu-latest
 
     steps:
-      # We'll need to check out the repository so that we can edit the README.
-      - name: Checkout
+      - name: 📥 Checkout Code (Full History)
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Let's get all the branches.
+          fetch-depth: 0
 
-      # Logic for step 3
-      - name: Check if .gitignore contains .env
+      - name: ✅ Check `.env` Exists in `.gitignore`
         run: |
           if grep -qw ".env" .gitignore; then
-            echo ".env is in .gitignore"
-            exit 0
+            echo "✅ .env is correctly listed in .gitignore"
           else
-            echo ".env is not in .gitignore"
+            echo "❌ .env is missing from .gitignore"
             exit 1
           fi
 
-      # In README.md, switch step 3 for step 4.
-      - name: Update to step 4
+      - name: 🔄 Update Step Metadata (Step 3 → Step 4)
         uses: skills/action-update-step@v2
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           from_step: 3
-          to_step: X
+          to_step: 4
